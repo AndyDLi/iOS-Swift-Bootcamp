@@ -23,7 +23,7 @@ struct ContentView: View {
         Workout(
             dayOfWeek: "Tues",
             dayOfMonth: 16,
-            title: "Push",
+            title: "Pull",
             musclesHit: 3,
             personalRecords: 2,
             duration: 75
