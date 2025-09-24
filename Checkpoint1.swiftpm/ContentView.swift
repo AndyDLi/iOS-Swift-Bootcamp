@@ -67,14 +67,14 @@ struct ContentView: View {
                 Button(action: { print("Clicked Plus!")} , label: {
                     Label("", systemImage: "plus") }
                 )
-            }.padding(EdgeInsets(top: 10, leading: 22, bottom: 10, trailing: 10))
+            }.padding(EdgeInsets(top: 0, leading: 20, bottom: 10, trailing: 10))
             Spacer();
             
             VStack {
                 Text("September 2025 Log")
                     .font(Font.largeTitle)
                     .bold()
-                    .padding(EdgeInsets(top: 0, leading: 0, bottom: 10, trailing: 0))
+                    .padding(Edge.Set.vertical, 5)
                 ForEach(workouts) {
                     workout in
                     WorkoutLog(workout: workout)
@@ -103,7 +103,7 @@ struct WorkoutLog: View {
                     Text("\(workout.dayOfMonth)") // Text Expects a String
                         .font(.title2)
                         .fontWeight(.bold)
-                }.frame(width: 40)
+                }.frame(width: 60, height: 60).border(.white).cornerRadius(15)
                 
                 VStack (alignment: .leading, spacing: 4) {
                     HStack {
@@ -118,7 +118,7 @@ struct WorkoutLog: View {
                     
                     Text("\(Image(systemName: "figure.strengthtraining.traditional")) \(workout.musclesHit) Muscles Hit")
                     Text("\(Image(systemName: "trophy.fill")) \(workout.personalRecords) PRs")
-                }
+                }.padding(Edge.Set.horizontal, 10)
             }
         }
     }
