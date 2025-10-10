@@ -13,35 +13,75 @@ struct AddLiftLog: View {
     @State private var personalRecords: String = ""
     @State private var duration: String = ""
     
-    @State private var alertMessage: String = "";
-    @State private var showAlert: Bool = false;
+    @State private var alertMessage: String = ""
+    @State private var showAlert: Bool = false
     
     var body: some View {
-        VStack {
-            HStack {
-                Button(
-                    action: { dismiss() },
-                    label: { Label("", systemImage: "chevron.left") }
-                )
-                Spacer()
-            }.padding(EdgeInsets(top: 20, leading: 20, bottom: 10, trailing: 10))
+        ZStack {
+            Color(red: 250/255, green: 250/255, blue: 252/255)
+                .ignoresSafeArea()
             
-            Text("New Lift").font(.largeTitle).bold()
-            
-            inputForm
-            
-            Button(
-                action: {
-                    addLog();
-                    if (!showAlert) {
-                        dismiss()
+            VStack(spacing: 0) {
+                HStack {
+                    Button(
+                        action: { dismiss() }
+                    ) {
+                        ZStack {
+                            Circle()
+                                .fill(Color.white)
+                                .frame(width: 36, height: 36)
+                                .shadow(color: Color.black.opacity(0.06), radius: 6, x: 0, y: 3)
+                            
+                            Image(systemName: "xmark")
+                                .font(.system(size: 14, weight: .semibold))
+                                .foregroundColor(.gray)
+                        }
                     }
-                },
-                label: { Text("Add to Log") }
-            )
+                    
+                    Spacer()
+                    
+                    Text("New Lift")
+                        .font(.system(size: 18, weight: .bold))
+                        .foregroundColor(.black)
+                    
+                    Spacer()
+                    
+                    Circle()
+                        .fill(Color.clear)
+                        .frame(width: 36, height: 36)
+                }
+                .padding(.horizontal, 24)
+                .padding(.top, 20)
+                .padding(.bottom, 24)
+                
+                ScrollView {
+                    VStack(spacing: 14) {
+                        inputForm
+                    }
+                    .padding(.horizontal, 24)
+                }
+                
+                Button(
+                    action: {
+                        addLog()
+                        if !showAlert {
+                            dismiss()
+                        }
+                    }
+                ) {
+                    Text("Add Workout")
+                        .font(.system(size: 17, weight: .semibold))
+                        .foregroundColor(.white)
+                        .frame(maxWidth: .infinity)
+                        .frame(height: 54)
+                        .background(Color(red: 236/255, green: 106/255, blue: 112/255))
+                        .cornerRadius(16)
+                        .shadow(color: Color(red: 236/255, green: 106/255, blue: 112/255).opacity(0.3), radius: 12, x: 0, y: 6)
+                }
+                .padding(.horizontal, 24)
+                .padding(.vertical, 20)
+            }
         }
-        Spacer()
-        
         .alert(isPresented: $showAlert) {
             Alert(title: Text("Invalid"), message: Text(alertMessage), dismissButton: .default(Text("Ok")))
         }
@@ -50,24 +90,54 @@ struct AddLiftLog: View {
     // Add Log Components //
     
     private var inputForm: some View {
-        VStack {
-            TextField("Title:", text: $title).padding(.horizontal)
-            Divider().overlay(.white)
-            TextField("Muscles Hit:", text: $musclesHit).padding(.horizontal)
-            Divider().overlay(.white)
-            TextField("PRs", text: $personalRecords).padding(.horizontal)
-            Divider().overlay(.white)
-            TextField("Duration:", text: $duration).padding(.horizontal)
-            Divider().overlay(.white)
-            DatePicker(
-                "Select Date",
-                selection: $selectedDate,
-                displayedComponents: [.date]
+        VStack(spacing: 6) {
+            InputField(
+                icon: "dumbbell.fill",
+                placeholder: "Workout Title",
+                text: $title
             )
-            .datePickerStyle(GraphicalDatePickerStyle())
-            Divider().overlay(.white)
-        }.padding()
-        .background(RoundedRectangle(cornerRadius: 12).foregroundColor(.black)).padding()
+            
+            InputField(
+                icon: "figure.strengthtraining.traditional",
+                placeholder: "Muscles Hit",
+                text: $musclesHit
+            )
+            
+            InputField(
+                icon: "trophy.fill",
+                placeholder: "Personal Records",
+                text: $personalRecords
+            )
+            
+            InputField(
+                icon: "clock",
+                placeholder: "Duration (minutes)",
+                text: $duration
+            )
+            
+            VStack(alignment: .leading, spacing: 8) {
+                DatePicker(
+                    "",
+                    selection: $selectedDate,
+                    displayedComponents: [.date]
+                )
+                .datePickerStyle(GraphicalDatePickerStyle())
+                .tint(Color(red: 236/255, green: 106/255, blue: 112/255))
+                .labelsHidden()
+                .background(
+                    RoundedRectangle(cornerRadius: 14)
+                        .fill(Color.white)
+                )
+                .overlay(
+                    RoundedRectangle(cornerRadius: 14)
+                        .stroke(Color.gray.opacity(0.1), lineWidth: 1)
+                )
+                .shadow(color: Color.black.opacity(0.04), radius: 6, x: 0, y: 3)
+            }
+        }
+        .padding()
+        .background(RoundedRectangle(cornerRadius: 12).foregroundColor(.black.opacity(0.1)))
+        .padding()
     }
     
     private func addLog() -> (Void) {
@@ -117,4 +187,3 @@ struct AddLiftLog: View {
         showAlert = false
     }
 }
-

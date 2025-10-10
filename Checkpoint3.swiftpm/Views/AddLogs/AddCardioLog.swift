@@ -15,56 +15,123 @@ struct AddCardioLog: View {
     @State private var showAlert: Bool = false
     
     var body: some View {
-        VStack {
-            HStack {
-                Button(
-                    action: { dismiss() },
-                    label: { Label("", systemImage: "chevron.left") }
-                )
-                Spacer()
-            }
-            .padding(EdgeInsets(top: 20, leading: 20, bottom: 10, trailing: 10))
+        ZStack {
+            Color(red: 250/255, green: 250/255, blue: 252/255)
+                .ignoresSafeArea()
             
-            Text("New Cardio").font(.largeTitle).bold()
-            
-            inputForm
-            
-            Button(
-                action: {
-                    addLog()
-                    if !showAlert {
-                        dismiss()
+            VStack(spacing: 0) {
+                HStack {
+                    Button(action: { dismiss() }) {
+                        ZStack {
+                            Circle()
+                                .fill(Color.white)
+                                .frame(width: 36, height: 36)
+                                .shadow(color: Color.black.opacity(0.06), radius: 6, x: 0, y: 3)
+                            
+                            Image(systemName: "xmark")
+                                .font(.system(size: 14, weight: .semibold))
+                                .foregroundColor(.gray)
+                        }
                     }
-                },
-                label: { Text("Add to Log") }
-            )
+                    
+                    Spacer()
+                    
+                    Text("New Cardio")
+                        .font(.system(size: 18, weight: .bold))
+                        .foregroundColor(.black)
+                                
+                    Spacer()
+                    
+                    Circle()
+                        .fill(Color.clear)
+                        .frame(width: 36, height: 36)
+                }
+                .padding(.horizontal, 24)
+                .padding(.top, 20)
+                .padding(.bottom, 24)
+
+                ScrollView {
+                    VStack(spacing: 14) {
+                        inputForm
+                    }
+                    .padding(.horizontal, 24)
+                }
+                
+                Button(
+                    action: {
+                        addLog()
+                        if !showAlert {
+                            dismiss()
+                        }
+                    })
+                {
+                    Text("Add Workout")
+                        .font(.system(size: 17, weight: .semibold))
+                        .foregroundColor(.white)
+                        .frame(maxWidth: .infinity)
+                        .frame(height: 54)
+                        .background(Color(red: 236/255, green: 106/255, blue: 112/255))
+                        .cornerRadius(16)
+                        .shadow(color: Color(red: 236/255, green: 106/255, blue: 112/255).opacity(0.3), radius: 12, x: 0, y: 6)
+                }
+                .padding(.horizontal, 24)
+                .padding(.vertical, 20)
+            }
         }
-        Spacer()
+        
         .alert(isPresented: $showAlert) {
-            Alert(title: Text("Invalid"), message: Text(alertMessage), dismissButton: .default(Text("Ok")))
+            Alert(title: Text("Invalid"), message: Text(alertMessage), dismissButton: .default(Text("OK")))
         }
     }
     
     private var inputForm: some View {
-        VStack {
-            TextField("Title:", text: $title).padding(.horizontal)
-            Divider().overlay(.white)
-            TextField("Duration:", text: $duration).padding(.horizontal)
-            Divider().overlay(.white)
-            TextField("Calories:", text: $calories).padding(.horizontal)
-            Divider().overlay(.white)
-            TextField("Max Heart Rate:", text: $maxHeartRate).padding(.horizontal)
-            Divider().overlay(.white)
-            DatePicker(
-                "Select Date",
-                selection: $selectedDate,
-                displayedComponents: [.date]
+        VStack(spacing: 6) {
+            InputField(
+                icon: "dumbbell.fill",
+                placeholder: "Workout Title",
+                text: $title
             )
-            .datePickerStyle(GraphicalDatePickerStyle())
-            Divider().overlay(.white)
+            
+            InputField(
+                icon: "clock",
+                placeholder: "Duration (minutes)",
+                text: $duration
+            )
+            
+            InputField(
+                icon: "flame.fill",
+                placeholder: "Calories",
+                text: $calories
+            )
+            
+            InputField(
+                icon: "heart.fill",
+                placeholder: "Max Heart Rate",
+                text: $maxHeartRate
+            )
+            
+            VStack(alignment: .leading, spacing: 8) {
+                DatePicker(
+                    "",
+                    selection: $selectedDate,
+                    displayedComponents: [.date]
+                )
+                .datePickerStyle(GraphicalDatePickerStyle())
+                .tint(Color(red: 236/255, green: 106/255, blue: 112/255))
+                .labelsHidden()
+                .background(
+                    RoundedRectangle(cornerRadius: 14)
+                        .fill(Color.white)
+                )
+                .overlay(
+                    RoundedRectangle(cornerRadius: 14)
+                        .stroke(Color.gray.opacity(0.1), lineWidth: 1)
+                )
+                .shadow(color: Color.black.opacity(0.04), radius: 6, x: 0, y: 3)
+            }
         }
         .padding()
-        .background(RoundedRectangle(cornerRadius: 12).foregroundColor(.black))
+        .background(RoundedRectangle(cornerRadius: 12).foregroundColor(.black.opacity(0.1)))
         .padding()
     }
     
@@ -113,5 +180,49 @@ struct AddCardioLog: View {
         
         onAdd(newCardio)
         showAlert = false
+    }
+}
+
+struct InputField: View {
+    let icon: String
+    let placeholder: String
+    @Binding var text: String
+    
+    var body: some View {
+        HStack(spacing: 12) {
+            Image(systemName: icon)
+                .font(.system(size: 16, weight: .medium))
+                .foregroundColor(Color(red: 236/255, green: 106/255, blue: 112/255))
+                .frame(width: 24)
+            
+            TextField(placeholder, text: $text)
+                .font(.system(size: 16, weight: .medium))
+                .foregroundColor(.black)
+        }
+        .padding(16)
+        .background(
+            RoundedRectangle(cornerRadius: 14)
+                .fill(Color.white)
+        )
+        .overlay(
+            RoundedRectangle(cornerRadius: 14)
+                .stroke(Color.gray.opacity(0.1), lineWidth: 1)
+        )
+        .shadow(color: Color.black.opacity(0.04), radius: 6, x: 0, y: 3)
+    }
+}
+
+// MARK: - Placeholder Extension
+
+extension View {
+    func placeholder<Content: View> (
+        when shouldShow: Bool,
+        alignment: Alignment = .leading,
+        @ViewBuilder placeholder: () -> Content
+    ) -> some View {
+        ZStack(alignment: alignment) {
+            placeholder().opacity(shouldShow ? 1 : 0)
+            self
+        }
     }
 }
