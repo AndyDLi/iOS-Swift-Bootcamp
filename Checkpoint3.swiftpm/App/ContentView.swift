@@ -13,21 +13,10 @@ struct ContentView: View {
     @State private var selectedWorkout: WorkoutType = .lifts
     
     var body: some View {
-        ZStack {
-            LinearGradient(
-                gradient: Gradient(colors: [
-                    Color(red: 250/255, green: 250/255, blue: 252/255),
-                    Color(red: 245/255, green: 245/255, blue: 248/255)
-                ]),
-                startPoint: .top,
-                endPoint: .bottom
-            ).ignoresSafeArea()
-            
-            VStack {
-                NavigationBar
-                Spacer()
-                WorkoutLogList
-            }
+        VStack {
+            NavigationBar
+            Spacer()
+            WorkoutLogList
         }
         
         // Shows Logging Pages

@@ -117,17 +117,6 @@ struct AddCardioLog: View {
                     displayedComponents: [.date]
                 )
                 .datePickerStyle(GraphicalDatePickerStyle())
-                .tint(Color(red: 236/255, green: 106/255, blue: 112/255))
-                .labelsHidden()
-                .background(
-                    RoundedRectangle(cornerRadius: 14)
-                        .fill(Color.white)
-                )
-                .overlay(
-                    RoundedRectangle(cornerRadius: 14)
-                        .stroke(Color.gray.opacity(0.1), lineWidth: 1)
-                )
-                .shadow(color: Color.black.opacity(0.04), radius: 6, x: 0, y: 3)
             }
         }
         .padding()

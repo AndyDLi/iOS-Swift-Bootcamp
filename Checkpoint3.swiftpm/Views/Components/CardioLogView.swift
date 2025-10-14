@@ -21,7 +21,7 @@ struct CardioLogView: View {
                 .fontWeight(.bold)
         }
         .frame(width: 60, height: 60)
-        .border(.white)
+        .border(.black)
         .cornerRadius(15)
     }
     

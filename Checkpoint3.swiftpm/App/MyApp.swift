@@ -14,7 +14,7 @@ struct MyApp: App {
         UISegmentedControl.appearance().setTitleTextAttributes(normalAttrs, for: .normal)
         UISegmentedControl.appearance().setTitleTextAttributes(selectedAttrs, for: .selected)
         
-        UIDatePicker.appearance().tintColor = .white // accent highlight
+        UIDatePicker.appearance().tintColor = .white
     }
     
     var body: some Scene {
